@@ -13,19 +13,25 @@ import (
 
 // Opens a zip file by path.
 func Open(path string) (*zip.Reader, error) {
+	_, rd, err := OpenCloser(path)
+	return rd, err
+}
+
+// OpenCloser is like Open but returns an additional Closer to avoid leaking open files.
+func OpenCloser(path string) (io.Closer, *zip.Reader, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	finfo, err := file.Stat()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	zr, err := NewReader(file, finfo.Size())
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return zr, nil
+	return file, zr, nil
 }
 
 // Open a zip file, specially handling various binaries that may have been
