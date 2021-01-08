@@ -83,7 +83,7 @@ func zipExeReaderMacho(rda io.ReaderAt, size int64) (*zip.Reader, error) {
 	return zip.NewReader(section, section.Size())
 }
 
-// zipExeReaderPe treats the file as a Portable Exectuable binary
+// zipExeReaderPe treats the file as a Portable Executable binary
 // (Windows executable) and attempts to find a zip archive.
 func zipExeReaderPe(rda io.ReaderAt, size int64) (*zip.Reader, error) {
 	file, err := pe.NewFile(rda)
